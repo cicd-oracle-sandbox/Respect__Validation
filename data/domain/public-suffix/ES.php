@@ -1,0 +1,8 @@
+<?php declare(strict_types=1);
+// SPDX-FileCopyrightText: 2007–22 Mozilla Foundation
+// SPDX-License-Identifier: MPL-2.0-no-copyleft-exception
+return [
+    'exceptions' => [],
+    'rules' => ['123MIWEB.ES', 'COM.ES', 'EDU.ES', 'GOB.ES', 'MYSPREADSHOP.ES', 'NOM.ES', 'ORG.ES'],
+    'wildcards' => [],
+];

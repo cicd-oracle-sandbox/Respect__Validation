@@ -1,0 +1,57 @@
+<?php
+
+/*
+ * SPDX-License-Identifier: MIT
+ * SPDX-FileCopyrightText: (c) Respect Project Contributors
+ * SPDX-FileContributor: Alexandre Gomes Gaigalas <alganet@gmail.com>
+ * SPDX-FileContributor: Henrique Moody <henriquemoody@gmail.com>
+ * SPDX-FileContributor: Jonathan Stewmon <jstewmon@rmn.com>
+ */
+
+declare(strict_types=1);
+
+test('https://github.com/Respect/Validation/issues/796', catchAll(
+    fn() => v::named('the given data', v::init()
+        ->key(
+            'mysql',
+            v::init()
+                ->key('host', v::stringType())
+                ->key('user', v::stringType())
+                ->key('password', v::stringType())
+                ->key('schema', v::stringType()),
+        )
+        ->key(
+            'postgresql',
+            v::init()
+                ->key('host', v::stringType())
+                ->key('user', v::stringType())
+                ->key('password', v::stringType())
+                ->key('schema', v::stringType()),
+        ))
+        ->assert([
+            'mysql' => [
+                'host' => 42,
+                'user' => 'user',
+                'password' => 'password',
+                'schema' => 'schema',
+            ],
+            'postgresql' => [
+                'host' => 'host',
+                'user' => 42,
+                'password' => 'password',
+                'schema' => 'schema',
+            ],
+        ]),
+    fn(string $message, string $fullMessage, array $messages) => expect()
+        ->and($message)->toBe('`.mysql.host` (<- the given data) must be a string')
+        ->and($fullMessage)->toBe(<<<'FULL_MESSAGE'
+            - the given data must pass all the rules
+              - `.mysql.host` must be a string
+              - `.postgresql.user` must be a string
+            FULL_MESSAGE)
+        ->and($messages)->toBe([
+            '__root__' => 'the given data must pass all the rules',
+            'mysql' => '`.mysql.host` must be a string',
+            'postgresql' => '`.postgresql.user` must be a string',
+        ]),
+));

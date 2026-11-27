@@ -1,0 +1,54 @@
+<!--
+SPDX-License-Identifier: MIT
+SPDX-FileCopyrightText: (c) Respect Project Contributors
+SPDX-FileContributor: Alexandre Gomes Gaigalas <alganet@gmail.com>
+SPDX-FileContributor: Henrique Moody <henriquemoody@gmail.com>
+-->
+
+# Not
+
+- `Not(Validator $validator)`
+
+Negates any validator.
+
+```php
+v::not(v::ip())->assert('foo');
+// Validation passes successfully
+```
+
+In the sample above, validator returns true because 'foo' isn't an IP Address.
+
+You can negate complex, grouped or chained validators as well:
+
+```php
+v::not(v::intVal()->positive())->assert(-1.5);
+// Validation passes successfully
+```
+
+Each other validation has custom messages for negated validators.
+
+## Templates
+
+## Template placeholders
+
+| Placeholder | Description                                                      |
+| ----------- | ---------------------------------------------------------------- |
+| `subject`   | The validated input or the custom validator name (if specified). |
+
+## Categorization
+
+- Core
+- Conditions
+- Nesting
+
+## Changelog
+
+| Version | Description |
+| ------: | :---------- |
+|   0.3.9 | Created     |
+
+## See Also
+
+- [Named](Named.md)
+- [NoneOf](NoneOf.md)
+- [Templated](Templated.md)

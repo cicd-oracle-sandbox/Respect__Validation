@@ -1,0 +1,60 @@
+<!--
+SPDX-License-Identifier: MIT
+SPDX-FileCopyrightText: (c) Respect Project Contributors
+SPDX-FileContributor: Alexandre Gomes Gaigalas <alganet@gmail.com>
+SPDX-FileContributor: Henrique Moody <henriquemoody@gmail.com>
+SPDX-FileContributor: Kirill Dlussky <kirill@dlussky.ru>
+-->
+
+# AnyOf
+
+- `AnyOf(Validator $validator1, Validator $validator2)`
+- `AnyOf(Validator $validator1, Validator $validator2, Validator ...$validators)`
+
+This is a group validator that acts as an OR operator.
+
+```php
+v::anyOf(v::intVal(), v::floatVal())->assert(15.5);
+// Validation passes successfully
+```
+
+In the sample above, `IntVal()` doesn't validates, but `FloatVal()` validates,
+so `AnyOf()` returns true.
+
+`AnyOf()` returns true if at least one inner validator passes.
+
+## Templates
+
+### `AnyOf::TEMPLATE_STANDARD`
+
+|       Mode | Template                                        |
+| ---------: | :---------------------------------------------- |
+|  `default` | {{subject}} must pass at least one of the rules |
+| `inverted` | {{subject}} must pass at least one of the rules |
+
+## Template placeholders
+
+| Placeholder | Description                                                      |
+| ----------- | ---------------------------------------------------------------- |
+| `subject`   | The validated input or the custom validator name (if specified). |
+
+## Categorization
+
+- Composite
+- Nesting
+
+## Changelog
+
+| Version | Description                                   |
+| ------: | :-------------------------------------------- |
+|   3.0.0 | Require at least two validators to be defined |
+|   2.0.0 | Created                                       |
+
+## See Also
+
+- [AllOf](AllOf.md)
+- [ContainsAny](ContainsAny.md)
+- [NoneOf](NoneOf.md)
+- [OneOf](OneOf.md)
+- [ShortCircuit](ShortCircuit.md)
+- [When](When.md)

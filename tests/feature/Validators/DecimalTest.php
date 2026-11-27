@@ -1,0 +1,30 @@
+<?php
+
+/*
+ * SPDX-License-Identifier: MIT
+ * SPDX-FileCopyrightText: (c) Respect Project Contributors
+ * SPDX-FileContributor: Alexandre Gomes Gaigalas <alganet@gmail.com>
+ * SPDX-FileContributor: Henrique Moody <henriquemoody@gmail.com>
+ */
+
+declare(strict_types=1);
+
+test('Scenario #1', catchMessage(
+    fn() => v::decimal(3)->assert(0.1234),
+    fn(string $message) => expect($message)->toBe('0.1234 must have 3 decimal places'),
+));
+
+test('Scenario #2', catchFullMessage(
+    fn() => v::decimal(2)->assert(0.123),
+    fn(string $fullMessage) => expect($fullMessage)->toBe('- 0.123 must have 2 decimal places'),
+));
+
+test('Scenario #3', catchMessage(
+    fn() => v::not(v::decimal(5))->assert(0.12345),
+    fn(string $message) => expect($message)->toBe('0.12345 must not have 5 decimal places'),
+));
+
+test('Scenario #4', catchFullMessage(
+    fn() => v::not(v::decimal(2))->assert(0.34),
+    fn(string $fullMessage) => expect($fullMessage)->toBe('- 0.34 must not have 2 decimal places'),
+));

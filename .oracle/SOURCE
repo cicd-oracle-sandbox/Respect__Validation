@@ -1,0 +1,4 @@
+upstream: https://github.com/Respect/Validation
+commit: 10f7787d752576bedc80a654d66d17879a5e73d2
+license: MIT
+Unmodified snapshot except that .github/workflows was emptied.

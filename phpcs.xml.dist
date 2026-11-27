@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<ruleset
+    name="PHPCS Coding Standards for Respect"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd"
+>
+    <arg name="basepath" value="." />
+    <arg name="cache" value=".phpcs.cache" />
+    <arg name="colors" />
+    <arg name="extensions" value="php,phpt" />
+    <arg value="p" />
+    <arg value="s" />
+
+    <file>src/</file>
+    <file>src-dev/</file>
+    <file>tests/</file>
+
+    <!-- PHPStan type-inference fixtures: intentional global functions + assertType() calls. -->
+    <exclude-pattern>tests/inference/assertions/*</exclude-pattern>
+
+    <rule ref="Respect" />
+
+    <!-- Exclusions -->
+    <rule ref="Squiz.Arrays.ArrayDeclaration.ValueNoNewline">
+        <exclude-pattern>src/Validators/Tld.php</exclude-pattern>
+    </rule>
+    <rule ref="Squiz.Functions.GlobalFunction">
+        <exclude-pattern>tests/Pest.php</exclude-pattern>
+    </rule>
+    <rule ref="Generic.Files.LineLength.TooLong">
+        <exclude-pattern>src/Mixins/</exclude-pattern>
+        <exclude-pattern>tests/feature/</exclude-pattern>
+    </rule>
+    <!-- Generated mixin docblocks carry @template/@param/@return narrowing types whose
+         formatting (annotation groups, fully-qualified class names, bare iterable item
+         types, null ordering) is the generator's concern, not hand-maintained style. -->
+    <rule ref="SlevomatCodingStandard.Commenting.DocCommentSpacing">
+        <exclude-pattern>src/Mixins/</exclude-pattern>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly.ReferenceViaFullyQualifiedName">
+        <exclude-pattern>src/Mixins/</exclude-pattern>
+    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingTraversableTypeHintSpecification">
+        <exclude-pattern>src/Mixins/</exclude-pattern>
+    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.NullTypeHintOnLastPosition">
+        <exclude-pattern>src/Mixins/</exclude-pattern>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Functions.StaticClosure.ClosureNotStatic">
+        <exclude-pattern>tests/Pest.php</exclude-pattern>
+        <exclude-pattern>tests/feature</exclude-pattern>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Classes.ClassStructure">
+        <exclude-pattern>tests/Pest.php</exclude-pattern>
+        <exclude-pattern>tests/feature</exclude-pattern>
+    </rule>
+</ruleset>

@@ -1,0 +1,88 @@
+<!--
+SPDX-License-Identifier: MIT
+SPDX-FileCopyrightText: (c) Respect Project Contributors
+SPDX-FileContributor: Alexandre Gomes Gaigalas <alganet@gmail.com>
+SPDX-FileContributor: Dominick Johnson
+SPDX-FileContributor: Henrique Moody <henriquemoody@gmail.com>
+-->
+
+# Min
+
+- `Min(Validator $validator)`
+
+Validates the minimum value of the input against a given validator.
+
+```php
+v::min(v::equals(10))->assert([10, 20, 30]);
+// Validation passes successfully
+
+v::min(v::between('a', 'c'))->assert(['b', 'd', 'f']);
+// Validation passes successfully
+
+v::min(v::greaterThan(new DateTime('yesterday')))
+        ->assert([new DateTime('today'), new DateTime('tomorrow')]);
+// Validation passes successfully
+
+v::min(v::lessThan(3))->assert([4, 8, 12]);
+// → The minimum of `[4, 8, 12]` must be less than 3
+```
+
+## Note
+
+This validator will pass if the input is empty. Use [Length](Length.md) with [GreaterThan][GreaterThan.md] to perform a stricter check:
+
+```php
+v::min(v::equals(10))->assert([]);
+// Validation passes successfully
+
+v::length(v::greaterThan(0))->min(v::equals(10))->assert([]);
+// → The length of `[]` must be greater than 0
+```
+
+## Templates
+
+### `Min::TEMPLATE_STANDARD`
+
+|       Mode | Template       |
+| ---------: | :------------- |
+|  `default` | The minimum of |
+| `inverted` | The minimum of |
+
+## Template as prefix
+
+The template serves as a prefix to the template of the inner validator.
+
+## Template placeholders
+
+| Placeholder | Description                                                      |
+| ----------- | ---------------------------------------------------------------- |
+| `subject`   | The validated input or the custom validator name (if specified). |
+
+## Categorization
+
+- Comparisons
+- Transformations
+
+## Changelog
+
+| Version | Description                 |
+| ------: | :-------------------------- |
+|   3.0.0 | Became a transformation     |
+|   2.0.0 | Became always inclusive     |
+|   1.0.0 | Became inclusive by default |
+|   0.3.9 | Created                     |
+
+## See Also
+
+- [All](All.md)
+- [Between](Between.md)
+- [BetweenExclusive](BetweenExclusive.md)
+- [DateTimeDiff](DateTimeDiff.md)
+- [Each](Each.md)
+- [Falsy](Falsy.md)
+- [GreaterThan](GreaterThan.md)
+- [GreaterThanOrEqual](GreaterThanOrEqual.md)
+- [Length](Length.md)
+- [LessThan](LessThan.md)
+- [LessThanOrEqual](LessThanOrEqual.md)
+- [Max](Max.md)

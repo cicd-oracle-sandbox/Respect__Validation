@@ -1,0 +1,75 @@
+<!--
+SPDX-License-Identifier: MIT
+SPDX-FileCopyrightText: (c) Respect Project Contributors
+SPDX-FileContributor: Alexandre Gomes Gaigalas <alganet@gmail.com>
+SPDX-FileContributor: Henrique Moody <henriquemoody@gmail.com>
+SPDX-FileContributor: yoshihiro suzuki <yoshihiro_suzuki@voyagegroup.com>
+-->
+
+# StringVal
+
+- `StringVal()`
+
+Validates whether the input can be used as a string.
+
+```php
+v::stringVal()->assert('6');
+// Validation passes successfully
+
+v::stringVal()->assert('String');
+// Validation passes successfully
+
+v::stringVal()->assert(1.0);
+// Validation passes successfully
+
+v::stringVal()->assert(42);
+// Validation passes successfully
+
+v::stringVal()->assert(false);
+// Validation passes successfully
+
+v::stringVal()->assert(true);
+// Validation passes successfully
+
+v::stringVal()->assert(new ClassWithToString());
+// Validation passes successfully
+```
+
+## Templates
+
+### `StringVal::TEMPLATE_STANDARD`
+
+|       Mode | Template                         |
+| ---------: | :------------------------------- |
+|  `default` | {{subject}} must be a string     |
+| `inverted` | {{subject}} must not be a string |
+
+## Template placeholders
+
+| Placeholder | Description                                                      |
+| ----------- | ---------------------------------------------------------------- |
+| `subject`   | The validated input or the custom validator name (if specified). |
+
+## Categorization
+
+- Strings
+- Types
+
+## Changelog
+
+| Version | Description       |
+| ------: | :---------------- |
+|   3.0.0 | Templates changed |
+|   2.0.0 | Created           |
+
+## See Also
+
+- [Alnum](Alnum.md)
+- [BoolType](BoolType.md)
+- [CallableType](CallableType.md)
+- [FloatType](FloatType.md)
+- [IntType](IntType.md)
+- [NullType](NullType.md)
+- [ObjectType](ObjectType.md)
+- [ResourceType](ResourceType.md)
+- [StringType](StringType.md)

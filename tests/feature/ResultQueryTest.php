@@ -1,0 +1,136 @@
+<?php
+
+/*
+ * SPDX-License-Identifier: MIT
+ * SPDX-FileCopyrightText: (c) Respect Project Contributors
+ * SPDX-FileContributor: Henrique Moody <henriquemoody@gmail.com>
+ */
+
+declare(strict_types=1);
+
+test('findByPath with nested keys', function (): void {
+    $validator = v::key('user', v::key('email', v::email()))
+        ->key('items', v::each(v::positive()));
+
+    $result = $validator->validate([
+        'user' => ['email' => 'invalid'],
+        'items' => [10, -5, 20],
+    ]);
+
+    $emailResult = $result->findByPath('user.email');
+    expect()
+        ->and($emailResult)->not->toBeNull()
+        ->and($emailResult?->hasFailed())->toBeTrue()
+        ->and($emailResult?->getMessage())->toBe('`.user.email` must be an email address');
+});
+
+test('findByPath with array index', function (): void {
+    $validator = v::key('items', v::each(v::positive()));
+
+    $result = $validator->validate([
+        'items' => [10, -5, 20],
+    ]);
+
+    $itemResult = $result->findByPath('items.1');
+    expect()
+        ->and($itemResult)->not->toBeNull()
+        ->and($itemResult?->hasFailed())->toBeTrue()
+        ->and($itemResult?->getMessage())->toBe('`.items.1` must be a positive number');
+});
+
+test('findByName with named validator', function (): void {
+    $result = v::named('User Email', v::email())->validate('bad');
+
+    $namedResult = $result->findByName('User Email');
+    expect()
+        ->and($namedResult)->not->toBeNull()
+        ->and($namedResult?->hasFailed())->toBeTrue()
+        ->and($namedResult?->getMessage())->toBe('User Email must be an email address');
+});
+
+test('findById with validator id', function (): void {
+    $result = v::stringType()->email()->validate(123);
+
+    $stringResult = $result->findById('stringType');
+    expect()
+        ->and($stringResult)->not->toBeNull()
+        ->and($stringResult?->hasFailed())->toBeTrue()
+        ->and($stringResult?->getMessage())->toBe('123 must be a string');
+});
+
+test('findByPath returns null when path not found', function (): void {
+    $result = v::key('user', v::email())->validate(['user' => 'bad']);
+
+    expect($result->findByPath('nonexistent'))->toBeNull();
+});
+
+test('findByName returns null when name not found', function (): void {
+    $result = v::email()->validate('bad');
+
+    expect($result->findByName('Nonexistent'))->toBeNull();
+});
+
+test('findById returns null when id not found', function (): void {
+    $result = v::email()->validate('bad');
+
+    expect($result->findById('nonexistent'))->toBeNull();
+});
+
+test('findByPath with wildcard matches first item', function (): void {
+    $validator = v::key('items', v::each(v::stringType()));
+
+    $result = $validator->validate([
+        'items' => ['valid', 123, 'also-valid'],
+    ]);
+
+    $firstMatch = $result->findByPath('items.*');
+
+    expect($firstMatch?->getMessage())->toBe('`.items.1` must be a string');
+});
+
+test('findByPath with wildcard at start matches prefix', function (): void {
+    $validator = v::key('user', v::key('email', v::email()))
+        ->key('admin', v::key('email', v::email()));
+
+    $result = $validator->validate([
+        'user' => ['email' => 'invalid'],
+        'admin' => ['email' => 'bad'],
+    ]);
+
+    $firstMatch = $result->findByPath('*.email');
+
+    expect($firstMatch?->getMessage())->toBe('`.user.email` must be an email address');
+});
+
+test('findByPath with wildcard in middle of path', function (): void {
+    $validator = v::key('data', v::key('items', v::each(v::positive())));
+
+    $result = $validator->validate([
+        'data' => ['items' => [10, -5, 20]],
+    ]);
+
+    $firstMatch = $result->findByPath('data.items.*');
+
+    expect($firstMatch?->getMessage())->toBe('`.data.items.1` must be a positive number');
+});
+
+test('findByPath with nested wildcards', function (): void {
+    $validator = v::key('groups', v::each(v::key('items', v::each(v::stringType()))));
+
+    $result = $validator->validate([
+        'groups' => [
+            ['items' => ['valid', 123]],
+            ['items' => ['ok', 456]],
+        ],
+    ]);
+
+    $firstMatch = $result->findByPath('groups.*.*');
+
+    expect($firstMatch?->getMessage())->toBe('`.groups.0.items.1` must be a string');
+});
+
+test('findByPath with wildcard returns null when no matches', function (): void {
+    $result = v::key('user', v::email())->validate(['user' => 'bad']);
+
+    expect($result->findByPath('nonexistent.*'))->toBeNull();
+});

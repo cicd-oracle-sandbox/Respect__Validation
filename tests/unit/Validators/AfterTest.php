@@ -1,0 +1,48 @@
+<?php
+
+/*
+ * SPDX-License-Identifier: MIT
+ * SPDX-FileCopyrightText: (c) Respect Project Contributors
+ * SPDX-FileContributor: Alexandre Gomes Gaigalas <alganet@gmail.com>
+ * SPDX-FileContributor: Henrique Moody <henriquemoody@gmail.com>
+ */
+
+declare(strict_types=1);
+
+namespace Respect\Validation\Validators;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
+use Respect\Validation\Test\RuleTestCase;
+use TypeError;
+
+#[Group('validator')]
+#[CoversClass(After::class)]
+final class AfterTest extends RuleTestCase
+{
+    /** @return iterable<string, array{After, mixed}> */
+    public static function providerForValidInput(): iterable
+    {
+        return [
+            'callback true' => [new After('strtolower', new Equals('abc')), 'ABC'],
+        ];
+    }
+
+    /** @return iterable<string, array{After, mixed}> */
+    public static function providerForInvalidInput(): iterable
+    {
+        return [
+            'callback false' => [new After('strtolower', new Equals('abc')), 'DEF'],
+        ];
+    }
+
+    #[Test]
+    public function shouldLetErrorsEmittedByTheChosenProvidedCallbackToBubbleUp(): void
+    {
+        $this->expectException(TypeError::class);
+        $this->expectExceptionMessage('strtolower(): Argument #1 ($string) must be of type string, int given');
+        $validator = new After('strtolower', new Equals('abc'));
+        $validator->evaluate(123);
+    }
+}

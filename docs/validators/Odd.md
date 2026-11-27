@@ -1,0 +1,54 @@
+<!--
+SPDX-License-Identifier: MIT
+SPDX-FileCopyrightText: (c) Respect Project Contributors
+SPDX-FileContributor: Alexandre Gomes Gaigalas <alganet@gmail.com>
+SPDX-FileContributor: Danilo Benevides <danilobenevides01@gmail.com>
+SPDX-FileContributor: Henrique Moody <henriquemoody@gmail.com>
+-->
+
+# Odd
+
+- `Odd()`
+
+Validates whether the input is an odd number or not.
+
+```php
+v::odd()->assert(3);
+// Validation passes successfully
+
+v::odd()->assert(0);
+// → 0 must be an odd number
+```
+
+Using `intVal()` before `odd()` is a best practice.
+
+## Templates
+
+### `Odd::TEMPLATE_STANDARD`
+
+|       Mode | Template                           |
+| ---------: | :--------------------------------- |
+|  `default` | {{subject}} must be an odd number  |
+| `inverted` | {{subject}} must be an even number |
+
+## Template placeholders
+
+| Placeholder | Description                                                      |
+| ----------- | ---------------------------------------------------------------- |
+| `subject`   | The validated input or the custom validator name (if specified). |
+
+## Categorization
+
+- Numbers
+
+## Changelog
+
+| Version | Description             |
+| ------: | :---------------------- |
+|   2.0.0 | Only validates integers |
+|   0.3.9 | Created                 |
+
+## See Also
+
+- [Even](Even.md)
+- [Multiple](Multiple.md)

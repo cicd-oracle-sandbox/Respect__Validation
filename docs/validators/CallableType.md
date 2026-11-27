@@ -1,0 +1,65 @@
+<!--
+SPDX-License-Identifier: MIT
+SPDX-FileCopyrightText: (c) Respect Project Contributors
+SPDX-FileContributor: Alexandre Gomes Gaigalas <alganet@gmail.com>
+SPDX-FileContributor: Henrique Moody <henriquemoody@gmail.com>
+-->
+
+# CallableType
+
+- `CallableType()`
+
+Validates whether the pseudo-type of the input is [callable](http://php.net/types.callable).
+
+```php
+v::callableType()->assert(function () {});
+// Validation passes successfully
+
+v::callableType()->assert('trim');
+// Validation passes successfully
+
+v::callableType()->assert([new DateTime(), 'format']);
+// Validation passes successfully
+```
+
+## Templates
+
+### `CallableType::TEMPLATE_STANDARD`
+
+|       Mode | Template                                    |
+| ---------: | :------------------------------------------ |
+|  `default` | {{subject}} must be a callable function     |
+| `inverted` | {{subject}} must not be a callable function |
+
+## Template placeholders
+
+| Placeholder | Description                                                      |
+| ----------- | ---------------------------------------------------------------- |
+| `subject`   | The validated input or the custom validator name (if specified). |
+
+## Categorization
+
+- Callables
+- Types
+
+## Changelog
+
+| Version | Description |
+| ------: | :---------- |
+|   1.0.0 | Created     |
+
+## See Also
+
+- [ArrayType](ArrayType.md)
+- [BoolType](BoolType.md)
+- [BoolVal](BoolVal.md)
+- [Factory](Factory.md)
+- [FloatType](FloatType.md)
+- [IntType](IntType.md)
+- [NullType](NullType.md)
+- [Number](Number.md)
+- [ObjectType](ObjectType.md)
+- [ResourceType](ResourceType.md)
+- [Satisfies](Satisfies.md)
+- [StringType](StringType.md)
+- [StringVal](StringVal.md)
