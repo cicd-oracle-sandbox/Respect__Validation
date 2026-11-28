@@ -1,0 +1,27 @@
+name: REUSE
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  reuse-check:
+    name: Compliance Check
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup-action
+        with:
+          python-version: '3.x'
+          python-deps: reuse
+
+      - run: reuse lint
+      - run: bin/console lint:spdx
